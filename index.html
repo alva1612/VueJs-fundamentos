@@ -8,17 +8,32 @@
 </head>
 <body>
     <script src="https://unpkg.com/vue@next"></script>
-    <div id="app"></div>
+    <div id="app">
+        
+    </div>
     <script>
         const vm = Vue.createApp({
             data() {
                 return {
-                    text: "<h1>Hola vue</h1>"
+                    text: "Hola Vue"
                 };
             },
-            template: `<div v-html="text"></div>`
+            methods: {
+                input(e) {
+                    console.log(e);
+                    console.log(e.target.value);
+                    this.text = e.target.value;
+                }
+            },
+            template: `
+                <p>{{ text }}</p>
+                <input 
+                    type="text" 
+                    v-on:input="input" 
+                    v-bind:value="text">
+            `
         }).mount('#app');
-        console.log(vm);
     </script>
+    
 </body>
 </html>
