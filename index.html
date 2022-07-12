@@ -8,6 +8,16 @@
 </head>
 <body>
     <script src="https://unpkg.com/vue@next"></script>
+    <style>
+        * {
+            margin: 0;
+        }
+        body {
+            background-color: rgb(0, 0, 96);
+            color: white;
+            padding: 20px;
+        }
+    </style>
     <div id="app">
         
     </div>
@@ -15,7 +25,9 @@
         const vm = Vue.createApp({
             data() {
                 return {
-                    text: "Hola Vue"
+                    firstName: "Alvaro",
+                    lastName: "Guillen",
+                    now: new Date()
                 };
             },
             methods: {
@@ -25,12 +37,17 @@
                     this.text = e.target.value;
                 }
             },
+            computed: {
+                fullName() {
+                    return this.firstName + " " + this.lastName;
+                },
+                today() {
+                    return this.now.toLocaleDateString();
+                }
+            },
             template: `
-                <p>{{ text }}</p>
-                <input 
-                    type="text" 
-                    v-model="text"
-                />
+                <div>{{ fullName }}</div>
+                <div>{{ today }}</div>
             `
         }).mount('#app');
     </script>
