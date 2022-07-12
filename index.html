@@ -18,14 +18,23 @@
                     text: "Hola Vue"
                 };
             },
+            methods: {
+                input(e) {
+                    console.log(e);
+                    console.log(e.target.value);
+                    this.text = e.target.value;
+                }
+            },
             template: `
                 <p>{{ text }}</p>
                 <input 
                     type="text" 
-                    v-model="text"
+                    @input="input" 
+                    :value="text"
                 />
             `
         }).mount('#app');
     </script>
+    
 </body>
 </html>
