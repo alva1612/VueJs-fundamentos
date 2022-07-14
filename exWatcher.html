@@ -20,7 +20,20 @@
                     /*styles: {
                         backgroundColor: "lightgray"
                     }*/
-                    username: ""
+                    username: "",
+                    posts: [{
+                        title: "Tit1",
+                        description: "Lorem ipsum..."
+                    }, {
+                        title: "Tit2",
+                        description: "Lorem ipsum..."
+                    }, {
+                        title: "Tit3",
+                        description: "Lorem ipsum..."
+                    },{
+                        title: "Tit4",
+                        description: "Lorem ipsum..."
+                    }, ]
                 };
             },
             methods: {
@@ -54,6 +67,12 @@
                 <h2>{{ text }}</h2>
                 <div v-if="open">
                     <p>Hola, {{username}} </p>
+                    <div class="list">
+                        <div v-for="(item, i) in posts" :key="i" class="item">
+                            <div class="title">{{ item.title }}</div>
+                            <p>{{ item.description }}</p>
+                        </div>
+                    </div>
                 </div>
                 <div v-else>
                     <label>Username</label>
@@ -93,6 +112,17 @@
         }
         .open {
             background-color: #b5e7a0;
+        }
+        .list {
+            display: flex;
+            flex-direction: column;
+        }
+        .item {
+            border: 1px solid gray;
+        }
+        .title {
+            font-weight: bold;
+            font-size: 1.5rem;
         }
     </style>
 </body>
