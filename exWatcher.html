@@ -8,16 +8,6 @@
 </head>
 <body>
     <script src="https://unpkg.com/vue@next"></script>
-    <style>
-        * {
-            margin: 0;
-        }
-        body {
-            background-color: rgb(0, 0, 96);
-            color: white;
-            padding: 20px;
-        }
-    </style>
     <div id="app">
         
     </div>
@@ -26,7 +16,11 @@
             data() {
                 return {
                     text: "Alvaro",
-                    open: false
+                    open: false,
+                    /*styles: {
+                        backgroundColor: "lightgray"
+                    }*/
+                    username: ""
                 };
             },
             methods: {
@@ -39,24 +33,67 @@
             watch: {
                 open(value) {
                     if (value) {
-                        this.text ="Puerta abierta";
-                    }
-                    else {
-                        this.text = "Puerta cerrada";
+                        this.text ="Inicio sesión";
+                        //this.styles.backgroundColor = "lightgreen";
+                    } else {
+                        this.text = "Accede a tu cuenta";
+                        //this.styles.backgroundColor = "lightcoral";
                     }
                 }
             },
             computed: {
                 label() {
-                    return this.open ? "Cerrar" : "Abrir";
+                    return this.open ? "Salir" : "Acceder";
+                },
+                styles() {
+                    return this.open ? ['open'] : ['closed']
                 }
             },
             template: `
-                <div>{{ text }}</div>
-                <button @click="open=!open">{{ label }}</button>
+            <div class="container" :style="styles" :class="styles">
+                <h2>{{ text }}</h2>
+                <div v-if="open">
+                    <p>Hola, {{username}} </p>
+                </div>
+                <div v-else>
+                    <label>Username</label>
+                    <input type="text" v-model="username"/>
+                </div>
+                <button @click="open=!open">
+                    <div v-if="!open">Acceder</div>
+                    <div v-else>Salir</div>
+                </button>
+            </div>
             `
         }).mount('#app');
     </script>
-    
+    <style>
+        html, body {
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        #app, .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            width: 100%;
+            height: 100%;
+        }
+        button {
+            margin-top: 24px;
+            border: none;
+            background-color: white;
+            padding: 8px 24px;
+            border-radius: 12px;
+        }
+        .closed {
+            background-color: #eca1a6;
+        }
+        .open {
+            background-color: #b5e7a0;
+        }
+    </style>
 </body>
 </html>
