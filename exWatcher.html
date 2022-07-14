@@ -21,6 +21,7 @@
                         backgroundColor: "lightgray"
                     }*/
                     username: "",
+                    selected: "",
                     posts: [{
                         title: "Tit1",
                         description: "Lorem ipsum..."
@@ -41,6 +42,45 @@
                     console.log(e);
                     console.log(e.target.value);
                     this.text = e.target.value;
+                },
+                add(e) {
+                    console.log(e.target);
+                    const title = document.getElementById('title').value;
+                    const description = document.getElementById('description').value;
+
+                    const newPost = {
+                        title,
+                        description
+                    }
+                    console.log(newPost);
+                    this.posts.push(newPost);
+                },
+                select(e) {
+                    const targetId = 'post-'+e;
+                    const targetElement = document.getElementById(targetId);
+
+                    const titleInput = document.getElementById('title');
+                    const descInput = document.getElementById('description');
+
+                    this.selected = targetId;
+                    
+                    const list = document.getElementsByClassName('item');
+                    for (let index = 0; index < list.length; index++) {
+                        const element = list[index];
+                        if (element.classList.contains('selected')){
+                            element.classList.remove('selected');
+                        }
+                    }
+                    targetElement.classList.add('selected');
+
+                    titleInput.value = targetElement.children[0].innerHTML;
+                    descInput.value = targetElement.children[1].innerHTML;
+                },
+                borrar(e) {
+                    const position = this.selected.substring(5);
+                    console.log(position);
+                    vm.posts.splice(position,1);
+                    
                 }
             },
             watch: {
@@ -68,7 +108,9 @@
                 <div v-if="open">
                     <p>Hola, {{username}} </p>
                     <div class="list">
-                        <div v-for="(item, i) in posts" :key="i" class="item">
+                        <div v-for="(item, i) in posts" :key="i"
+                            :ref="'posts'" @click="select(i)"
+                            :id="'post-'+i" class="item">
                             <div class="title">{{ item.title }}</div>
                             <p>{{ item.description }}</p>
                         </div>
@@ -77,6 +119,14 @@
                 <div v-else>
                     <label>Username</label>
                     <input type="text" v-model="username"/>
+                </div>
+                <div class="botonera" v-if="open">
+                    <input type="text" name="title" 
+                        id="title" placeholder="Título"/>
+                    <input type="text" name="description" 
+                        id="description" placeholder="Descripcion"/>
+                    <button @click="add">Agregar</button>
+                    <button @click="borrar">Eliminar</button>
                 </div>
                 <button @click="open=!open">
                     <div v-if="!open">Acceder</div>
@@ -106,6 +156,7 @@
             background-color: white;
             padding: 8px 24px;
             border-radius: 12px;
+            cursor: pointer;
         }
         .closed {
             background-color: #eca1a6;
@@ -123,6 +174,14 @@
         .title {
             font-weight: bold;
             font-size: 1.5rem;
+        }
+        .botonera {
+            display: flex;
+            flex-direction: column;
+        }
+        .selected {
+            box-shadow: 0 0 0 0.25rem green;
+            background-color: lightsalmon;
         }
     </style>
 </body>
