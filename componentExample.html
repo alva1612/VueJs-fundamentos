@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script src="https://unpkg.com/vue@next"></script>
+    <div id="app">
+        
+    </div>
+    <script>
+        const app = Vue.createApp({
+            data() {
+                return {
+                    text: "Alvaro",
+                    open: false,
+                    /*styles: {
+                        backgroundColor: "lightgray"
+                    }*/
+                    username: "",
+                    selected: "",
+                    posts: [{
+                        title: "Tit1",
+                        description: "Lorem ipsum..."
+                    }, {
+                        title: "Tit2",
+                        description: "Lorem ipsum..."
+                    }, {
+                        title: "Tit3",
+                        description: "Lorem ipsum..."
+                    },{
+                        title: "Tit4",
+                        description: "Lorem ipsum..."
+                    }, ]
+                };
+            },
+            methods: {
+                input(e) {
+                    console.log(e);
+                    console.log(e.target.value);
+                    this.text = e.target.value;
+                },
+                add(e) {
+                    console.log(e.target);
+                    const title = document.getElementById('title').value;
+                    const description = document.getElementById('description').value;
+
+                    const newPost = {
+                        title,
+                        description
+                    }
+                    console.log(newPost);
+                    this.posts.push(newPost);
+                },
+                select(e) {
+                    const targetId = 'post-'+e;
+                    const targetElement = document.getElementById(targetId);
+
+                    const titleInput = document.getElementById('title');
+                    const descInput = document.getElementById('description');
+
+                    this.selected = targetId;
+                    
+                    const list = document.getElementsByClassName('item');
+                    for (let index = 0; index < list.length; index++) {
+                        const element = list[index];
+                        if (element.classList.contains('selected')){
+                            element.classList.remove('selected');
+                        }
+                    }
+                    targetElement.classList.add('selected');
+
+                    titleInput.value = targetElement.children[0].innerHTML;
+                    descInput.value = targetElement.children[1].innerHTML;
+                },
+                borrar(e) {
+                    const position = this.selected.substring(5);
+                    console.log(position);
+                    vm.posts.splice(position,1);
+
+                }
+            },
+            watch: {
+                open(value) {
+                    if (value) {
+                        this.text ="Inicio sesión";
+                        //this.styles.backgroundColor = "lightgreen";
+                    } else {
+                        this.text = "Accede a tu cuenta";
+                        //this.styles.backgroundColor = "lightcoral";
+                    }
+                }
+            },
+            computed: {
+                label() {
+                    return this.open ? "Salir" : "Acceder";
+                },
+                styles() {
+                    return this.open ? ['open'] : ['closed']
+                }
+            },
+            template: `
+            <div class="container" :style="styles" :class="styles">
+                <h2>{{ text }}</h2>
+                <div v-if="open">
+                    <p>Hola, {{username}} </p>
+                    <div class="list">
+                        <item 
+                            v-for="(item, i) in posts" 
+                            :key="i"
+                            :post="item" :num="i"
+                            @click="select(i)"
+                        />
+                    </div>
+                </div>
+                <div v-else>
+                    <label>Username</label>
+                    <input type="text" v-model="username"/>
+                </div>
+                <div class="botonera" v-if="open">
+                    <input type="text" name="title" 
+                        id="title" placeholder="Título"/>
+                    <input type="text" name="description" 
+                        id="description" placeholder="Descripcion"/>
+                    <button @click="add">Agregar</button>
+                    <button @click="borrar">Eliminar</button>
+                </div>
+                <button @click="open=!open">
+                    <div v-if="!open">Acceder</div>
+                    <div v-else>Salir</div>
+                </button>
+            </div>
+            `
+        });
+
+        app.component("item", {
+            props: ["post","num"],
+            template:`   
+                <div
+                    :ref="'posts'" 
+                    :id="'post-'+num" class="item">
+                    <div class="title">{{ post.title }}</div>
+                    <p>{{ post.description }}</p>
+                </div>
+                `
+        });
+
+        const vm = app.mount('#app');
+
+    </script>
+    <style>
+        html, body {
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        #app, .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            width: 100%;
+            height: 100%;
+        }
+        button {
+            margin-top: 24px;
+            border: none;
+            background-color: white;
+            padding: 8px 24px;
+            border-radius: 12px;
+            cursor: pointer;
+        }
+        .closed {
+            background-color: #eca1a6;
+        }
+        .open {
+            background-color: #b5e7a0;
+        }
+        .list {
+            display: flex;
+            flex-direction: column;
+        }
+        .item {
+            border: 1px solid gray;
+        }
+        .title {
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+        .botonera {
+            display: flex;
+            flex-direction: column;
+        }
+        .selected {
+            box-shadow: 0 0 0 0.25rem green;
+            background-color: lightsalmon;
+        }
+    </style>
+</body>
+</html>
